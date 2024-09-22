@@ -1,83 +1,67 @@
-let input = document.getElementById('textbox')
-let button = document.getElementById('btn')
-let taskul = document.getElementById('tasks')
-let comptaskul = document.getElementById('CompletedTasks')
+let todoBtn = document.getElementById("todobtn");
+let todoInput = document.getElementById("todoinput");
+let ul = document.getElementById("todo-list");
+let completedUl = document.getElementById("completed-list");
 
-let taskArray = []
-let completedTask = []
+let activeTodosArray = [];
+let completedTodosArray = [];
 
-button.addEventListener('click', () => {
+todoBtn.addEventListener('click', () => {
+    const taskText = todoInput.value;
 
-    const inputContent = input.value
-   
-    if(inputContent === ''){
-     alert("Input Cannot be Empty")
-     return
+
+    if (!activeTodosArray.includes(taskText)) {
+        activeTodosArray.push(taskText);
+
+        const li = document.createElement("li");
+        li.innerText = taskText;
+
+        const trueBtn = document.createElement("button");
+        trueBtn.innerText = "Done";
+        trueBtn.classList.add("btn", "btn-success");
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Delete";
+        deleteBtn.classList.add("btn", "btn-danger");
+
+        li.appendChild(trueBtn);
+        li.appendChild(deleteBtn);
+        ul.appendChild(li);
+        todoInput.value = "";
+
+        trueBtn.addEventListener('click', () => {
+            li.style.textDecoration = "line-through";
+            completedUl.appendChild(li);
+            li.removeChild(trueBtn); // Remove the Done button from the list item
+            // Update the arrays correctly
+            activeTodosArray = activeTodosArray.filter(task => task !== taskText);
+            completedTodosArray.push(taskText);
+            console.log("Active");
+            console.log(activeTodosArray);
+            console.log("COM");
+            console.log(completedTodosArray);
+        });
+
+        deleteBtn.addEventListener('click', () => {
+            if (ul.contains(li)) {
+                ul.removeChild(li); y
+                activeTodosArray = activeTodosArray.filter(task => task !== taskText);
+            } else if (completedUl.contains(li)) {
+                completedUl.removeChild(li);
+                completedTodosArray = completedTodosArray.filter(task => task !== taskText);
+            }
+            console.log("Active");
+            console.log(activeTodosArray);
+            console.log("COM");
+            console.log(completedTodosArray);
+        });
+
+    } else {
+        alert("Task Already Exists");
+        todoInput.value = "";
     }
-
-   if(taskArray.includes(inputContent)){
-    alert("Already Exist")
-    return
-   }
-  
-    taskArray.push(inputContent)
-    console.log(taskArray);
-   
-    
-    let listItem = document.createElement('li')
-    listItem.className = 'list-group-item d-flex justify-content-between align-items-center'
-    
-    listItem.innerHTML = `
-    <p>${taskArray[taskArray.length - 1]}</p>
-    <button class="success btn-success" type=submit>Completed</button>
-    <button class="error btn-danger" type=submit>Remove</button>
-    <button class="cross" type=submit>Cut</button>
-    `
-    taskul.appendChild(listItem)
-    listItem.classList.add = 'AddedTask'
-    input.value = ""   
-    
-
-    
-    tickButton = listItem.querySelector('.success')
-    errorButton = listItem.querySelector('.error')
-    cutButton = listItem.querySelector('.cross')
-    
-    
-    //When Complete button is pressed
-    tickButton.addEventListener('click', () => {
-        console.log(listItem);
-        // listInfo = document.querySelector('p')
-        // console.log(listInfo);
-
-        
-        console.log(taskArray);
-        
-        completedTask.push(listItem)
-        taskArray = taskArray.filter((task) => {
-            task !== inputContent
-        })
-        console.log(completedTask);
-        
-        comptaskul.append(listItem)
-        
-        listItem.classList.add = 'completedTask'
-        
-        listItem.querySelector('.success').remove()
-        console.log("Shifted to Completed Tasks");  
-    })
-
-    //when delete button is pressed
-    errorButton.addEventListener('click', () =>{
-        
-        listItem.remove()
-
-    })
-
-    //when cross button is pressed
-    cutButton.addEventListener('click', () => {
-
-        let content = document.querySelector('p')
-        content.className = 'cutContent'
-    })
-})
+    console.log("Active");
+    console.log(activeTodosArray);
+    console.log("COM");
+    console.log(completedTodosArray);
+});
